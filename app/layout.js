@@ -1,6 +1,6 @@
 import './globals.css';
 
-const appUrl = process.env.NEXT_PUBLIC_URL || 'https://mini-nft.vercel.app';
+const appUrl = process.env.NEXT_PUBLIC_URL || 'https://mini-nft-kappa.vercel.app';
 const ogImage = `${appUrl}/og-image.svg`;
 
 export const metadata = {
@@ -51,3 +51,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
