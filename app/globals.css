@@ -1,0 +1,243 @@
+:root {
+  --bg: #07111f;
+  --panel: rgba(10, 24, 43, 0.78);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --text: #f5f7fb;
+  --muted: #a7b3c9;
+  --accent: #4da2ff;
+  --accent-strong: #2478ff;
+  --success: #6dedb5;
+  --danger: #ff8f8f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top, rgba(77, 162, 255, 0.28), transparent 34%),
+    linear-gradient(180deg, #07111f 0%, #040913 100%);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.hero {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.hero-copy,
+.mint-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 28px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.hero-copy {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.title {
+  margin: 18px 0 12px;
+  font-size: clamp(44px, 7vw, 82px);
+  line-height: 0.98;
+}
+
+.lede {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.stats {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.stat {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat-label {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.mint-card {
+  padding: 28px;
+}
+
+.card-title {
+  margin: 0 0 10px;
+  font-size: 32px;
+}
+
+.card-copy,
+.status-note,
+.helper-row,
+.contract-address,
+.footer-copy {
+  color: var(--muted);
+}
+
+.art {
+  margin: 22px 0;
+  aspect-ratio: 1;
+  width: 100%;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 18%),
+    linear-gradient(135deg, rgba(77, 162, 255, 0.92), rgba(36, 120, 255, 0.45) 40%, rgba(8, 17, 31, 0.4));
+  position: relative;
+  overflow: hidden;
+}
+
+.art::after {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+}
+
+.action-button,
+.secondary-button {
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.action-button {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: white;
+  font-weight: 700;
+}
+
+.secondary-button {
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.action-button:hover,
+.secondary-button:hover {
+  transform: translateY(-1px);
+}
+
+.action-button:disabled,
+.secondary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.status-note {
+  min-height: 48px;
+  margin: 16px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.status-note.success {
+  color: var(--success);
+}
+
+.status-note.error {
+  color: var(--danger);
+}
+
+.helper-row,
+.contract-address,
+.footer-copy {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.helper-row {
+  margin: 18px 0 0;
+}
+
+.contract-address {
+  margin-top: 12px;
+  word-break: break-all;
+}
+
+.footer-copy {
+  max-width: 1080px;
+  margin: 18px auto 0;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy,
+  .mint-card {
+    padding: 24px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
