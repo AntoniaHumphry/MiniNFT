@@ -7,21 +7,24 @@ import {
   createConfig,
   http,
   useAccount,
+  useCallsStatus,
   useConnect,
   useDisconnect,
   useReadContracts,
-  useWaitForTransactionReceipt,
-  useWriteContract
+  useSendCalls
 } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { coinbaseWallet, injected } from 'wagmi/connectors';
+import { baseAccount, injected } from 'wagmi/connectors';
+import { Attribution } from 'ox/erc8021';
 import { trackTransaction } from '@/utils/track';
 
 const CONTRACT_ADDRESS = '0xa54b4dc2161adc3bf73525ee7d68711ff60c0210';
 const APP_ID = 'app-001';
 const APP_NAME = 'MiniNFT';
 const BUILDER_CODE = 'bc_lexbha2k';
-const DATA_SUFFIX = '0x62635f6c6578626861326b0b0080218021802180218021802180218021';
+const PROVIDED_DATA_SUFFIX = '0x62635f6c6578626861326b0b0080218021802180218021802180218021';
+const GENERATED_DATA_SUFFIX = Attribution.toDataSuffix({ codes: [BUILDER_CODE] });
+const DATA_SUFFIX = GENERATED_DATA_SUFFIX === PROVIDED_DATA_SUFFIX ? PROVIDED_DATA_SUFFIX : GENERATED_DATA_SUFFIX;
 
 const contractAbi = [
   {
@@ -57,15 +60,14 @@ const contractAbi = [
 const wagmiConfig = createConfig({
   chains: [base],
   connectors: [
-    coinbaseWallet({
+    baseAccount({
       appName: APP_NAME
     }),
     injected()
   ],
   transports: {
     [base.id]: http()
-  },
-  dataSuffix: DATA_SUFFIX
+  }
 });
 
 const queryClient = new QueryClient();
@@ -74,8 +76,8 @@ function MintView() {
   const { address, isConnected, chainId } = useAccount();
   const { connect, connectors, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
-  const { writeContract, data: txHash, isPending: isMintSubmitting, error: writeError } = useWriteContract();
-  const [statusMessage, setStatusMessage] = useState('Connect a wallet on Base to mint your MiniNFT.');
+  const { sendCalls, data: callsId, isPending: isMintSubmitting, error: sendCallsError } = useSendCalls();
+  const [statusMessage, setStatusMessage] = useState('Connect with Base App or Coinbase Wallet to mint your MiniNFT.');
   const [statusType, setStatusType] = useState('');
   const [hasTracked, setHasTracked] = useState(false);
 
@@ -101,9 +103,16 @@ function MintView() {
     ]
   });
 
-  const { data: receipt, isLoading: isConfirming } = useWaitForTransactionReceipt({
-    hash: txHash
+  const { data: callsStatus } = useCallsStatus({
+    id: callsId,
+    query: {
+      enabled: Boolean(callsId),
+      refetchInterval: 1500
+    }
   });
+
+  const receipt = callsStatus?.receipts?.[0];
+  const isConfirming = Boolean(callsId) && callsStatus?.status !== 'success' && callsStatus?.status !== 'failure';
 
   const [totalSupply = 0n, maxSupply = 0n, hasMinted = false] = data || [];
   const mintedCount = Number(totalSupply);
@@ -111,21 +120,32 @@ function MintView() {
   const mintedPercent = maxCount > 0 ? Math.round((mintedCount / maxCount) * 100) : 0;
 
   useEffect(() => {
-    if (writeError) {
-      setStatusType('error');
-      setStatusMessage(writeError.shortMessage || writeError.message || 'Mint failed.');
+    if (!sendCallsError) {
+      return;
     }
-  }, [writeError]);
+
+    setStatusType('error');
+    setStatusMessage(sendCallsError.shortMessage || sendCallsError.message || 'Mint failed.');
+  }, [sendCallsError]);
 
   useEffect(() => {
-    if (!txHash) {
+    if (!callsId) {
       return;
     }
 
     setHasTracked(false);
     setStatusType('');
-    setStatusMessage(`Transaction submitted: ${txHash}`);
-  }, [txHash]);
+    setStatusMessage('Mint submitted. Waiting for Base to confirm the attributed transaction...');
+  }, [callsId]);
+
+  useEffect(() => {
+    if (callsStatus?.status !== 'failure') {
+      return;
+    }
+
+    setStatusType('error');
+    setStatusMessage('Mint failed before confirmation. Please retry in Base App or Coinbase Wallet.');
+  }, [callsStatus]);
 
   useEffect(() => {
     if (!receipt || hasTracked || !address) {
@@ -139,9 +159,12 @@ function MintView() {
     refetch();
   }, [receipt, hasTracked, address, refetch]);
 
-  const connectLabel = useMemo(() => {
-    const coinbaseConnector = connectors.find((connector) => connector.name.toLowerCase().includes('coinbase'));
-    return coinbaseConnector || connectors[0];
+  const preferredConnector = useMemo(() => {
+    return (
+      connectors.find((connector) => connector.id === 'baseAccount') ||
+      connectors.find((connector) => connector.name.toLowerCase().includes('coinbase')) ||
+      connectors[0]
+    );
   }, [connectors]);
 
   const actionDisabled =
@@ -153,7 +176,7 @@ function MintView() {
     chainId !== base.id;
 
   const handleMint = async () => {
-    if (!isConnected) {
+    if (!isConnected || !address) {
       setStatusType('error');
       setStatusMessage('Connect your wallet before minting.');
       return;
@@ -168,10 +191,18 @@ function MintView() {
     setStatusType('');
     setStatusMessage('Opening wallet for confirmation...');
 
-    writeContract({
-      address: CONTRACT_ADDRESS,
-      abi: contractAbi,
-      functionName: 'mint'
+    sendCalls({
+      account: address,
+      chainId: base.id,
+      experimental_fallback: true,
+      calls: [
+        {
+          to: CONTRACT_ADDRESS,
+          abi: contractAbi,
+          functionName: 'mint',
+          dataSuffix: DATA_SUFFIX
+        }
+      ]
     });
   };
 
@@ -204,7 +235,7 @@ function MintView() {
           <p className="footer-copy">
             Contract: {CONTRACT_ADDRESS}
             <br />
-            Free mint mechanics, one address one claim, and transaction attribution tracking included.
+            Attributed mint path enabled with ERC-8021 builder code suffixing and dashboard tracking.
           </p>
         </div>
 
@@ -216,8 +247,8 @@ function MintView() {
             <button
               className="action-button"
               type="button"
-              onClick={() => connect({ connector: connectLabel })}
-              disabled={isConnecting || !connectLabel}
+              onClick={() => connect({ connector: preferredConnector })}
+              disabled={isConnecting || !preferredConnector}
             >
               {isConnecting ? 'Connecting...' : 'Connect Wallet'}
             </button>
@@ -225,9 +256,9 @@ function MintView() {
             <>
               <button className="action-button" type="button" onClick={handleMint} disabled={actionDisabled}>
                 {isMintSubmitting
-                  ? 'Confirming in wallet...'
+                  ? 'Confirm in wallet...'
                   : isConfirming
-                    ? 'Waiting for confirmation...'
+                    ? 'Waiting for attributed receipt...'
                     : hasMinted
                       ? 'Already Minted'
                       : maxCount > 0 && mintedCount >= maxCount
@@ -246,6 +277,8 @@ function MintView() {
           <p className="helper-row">Network: {chainId === base.id ? 'Base' : isConnected ? `Chain ${chainId}` : 'Not connected'}</p>
           <p className="helper-row">Mint limit: one mint per wallet address.</p>
           <p className="helper-row">Builder code: {BUILDER_CODE}</p>
+          <p className="helper-row">ERC-8021 suffix: {DATA_SUFFIX === PROVIDED_DATA_SUFFIX ? 'Verified against provided value' : 'Generated from builder code'}</p>
+          <p className="helper-row">Best path for analytics: open the app inside Base App or Coinbase Wallet.</p>
           <p className="contract-address">Explorer: https://basescan.org/address/{CONTRACT_ADDRESS}</p>
         </div>
       </section>
