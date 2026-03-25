@@ -20,6 +20,8 @@ import { trackTransaction } from '@/utils/track';
 const CONTRACT_ADDRESS = '0xa54b4dc2161adc3bf73525ee7d68711ff60c0210';
 const APP_ID = 'app-001';
 const APP_NAME = 'MiniNFT';
+const BUILDER_CODE = 'bc_lexbha2k';
+const DATA_SUFFIX = '0x62635f6c6578626861326b0b0080218021802180218021802180218021';
 
 const contractAbi = [
   {
@@ -62,7 +64,8 @@ const wagmiConfig = createConfig({
   ],
   transports: {
     [base.id]: http()
-  }
+  },
+  dataSuffix: DATA_SUFFIX
 });
 
 const queryClient = new QueryClient();
@@ -242,6 +245,7 @@ function MintView() {
           </p>
           <p className="helper-row">Network: {chainId === base.id ? 'Base' : isConnected ? `Chain ${chainId}` : 'Not connected'}</p>
           <p className="helper-row">Mint limit: one mint per wallet address.</p>
+          <p className="helper-row">Builder code: {BUILDER_CODE}</p>
           <p className="contract-address">Explorer: https://basescan.org/address/{CONTRACT_ADDRESS}</p>
         </div>
       </section>
@@ -258,5 +262,3 @@ export default function Home() {
     </WagmiProvider>
   );
 }
-
-
