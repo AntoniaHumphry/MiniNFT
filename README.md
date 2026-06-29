@@ -26,3 +26,9 @@ It includes:
 - Mint contract configured at `0xa54b4dc2161adc3bf73525ee7d68711ff60c0210`
 - Free mint flow with gas paid by the user
 - Wallet-based mint limit
+- Live supply display
+- Metadata configured for the deployed app URL
+- Transaction tracking helper located in `utils/track.js`
+- Built for deployment as a Base mini app
+
+## Tech Stack
