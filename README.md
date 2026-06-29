@@ -105,3 +105,9 @@ When making changes, verify that:
 ## Production Notes
 
 Before deploying, make sure `NEXT_PUBLIC_URL` is set to the final public URL.
+
+This value is used so metadata points to the live app instead of a local development address.
+
+## License
+
+No license information is provided in the original project README.
