@@ -77,3 +77,9 @@ NEXT_PUBLIC_URL=https://your-deployed-site.example
 ## Usage
 
 1. Open the MiniNFT app.
+2. Connect a supported wallet.
+3. Review the current supply information.
+4. Mint the NFT if the connected wallet has not minted before.
+5. Confirm the transaction and pay the required gas fee.
+
+## Contract
