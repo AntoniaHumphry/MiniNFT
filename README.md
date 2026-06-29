@@ -49,3 +49,8 @@ Clone the repository:
 git clone https://github.com/AntoniaHumphry/MiniNFT.git
 cd MiniNFT
 ```
+
+Install dependencies:
+
+```bash
+npm install
