@@ -88,3 +88,8 @@ MiniNFT is wired to the following Base mainnet contract:
 
 ```text
 0xa54b4dc2161adc3bf73525ee7d68711ff60c0210
+```
+
+## Development Notes
+
+The app is intended for the Base mainnet mint flow.
