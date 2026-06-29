@@ -8,3 +8,9 @@ The mint itself is free; users only pay the network gas fee.
 ## Repository
 
 GitHub: https://github.com/AntoniaHumphry/MiniNFT.git
+
+## Overview
+
+MiniNFT provides a compact web interface for an NFT mint on Base mainnet.
+
+It includes:
