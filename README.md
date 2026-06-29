@@ -20,3 +20,9 @@ It includes:
 - Live supply reads
 - Base metadata and project verification tags
 - Transaction attribution tracking through `utils/track.js`
+
+## Features
+
+- Mint contract configured at `0xa54b4dc2161adc3bf73525ee7d68711ff60c0210`
+- Free mint flow with gas paid by the user
+- Wallet-based mint limit
