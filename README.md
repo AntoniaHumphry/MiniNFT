@@ -100,3 +100,8 @@ When making changes, verify that:
 - The mint limit behavior still works as expected.
 - Supply reads continue to display current information.
 - Metadata points to the correct deployed URL.
+- Transaction attribution tracking remains connected through `utils/track.js`.
+
+## Production Notes
+
+Before deploying, make sure `NEXT_PUBLIC_URL` is set to the final public URL.
