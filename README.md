@@ -32,3 +32,9 @@ It includes:
 - Built for deployment as a Base mini app
 
 ## Tech Stack
+
+The project uses a JavaScript web app setup with npm scripts.
+
+The original setup includes:
+
+- `npm install` for dependency installation
