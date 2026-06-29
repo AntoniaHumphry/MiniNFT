@@ -42,3 +42,10 @@ The original setup includes:
 - `NEXT_PUBLIC_URL` for production metadata configuration
 
 ## Getting Started
+
+Clone the repository:
+
+```bash
+git clone https://github.com/AntoniaHumphry/MiniNFT.git
+cd MiniNFT
+```
