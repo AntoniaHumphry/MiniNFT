@@ -14,3 +14,9 @@ GitHub: https://github.com/AntoniaHumphry/MiniNFT.git
 MiniNFT provides a compact web interface for an NFT mint on Base mainnet.
 
 It includes:
+
+- A Base mainnet mint flow
+- One mint per wallet
+- Live supply reads
+- Base metadata and project verification tags
+- Transaction attribution tracking through `utils/track.js`
