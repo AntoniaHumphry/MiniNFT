@@ -38,3 +38,7 @@ The project uses a JavaScript web app setup with npm scripts.
 The original setup includes:
 
 - `npm install` for dependency installation
+- `npm run dev` for local development
+- `NEXT_PUBLIC_URL` for production metadata configuration
+
+## Getting Started
