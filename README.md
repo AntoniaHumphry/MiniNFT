@@ -83,3 +83,8 @@ NEXT_PUBLIC_URL=https://your-deployed-site.example
 5. Confirm the transaction and pay the required gas fee.
 
 ## Contract
+
+MiniNFT is wired to the following Base mainnet contract:
+
+```text
+0xa54b4dc2161adc3bf73525ee7d68711ff60c0210
