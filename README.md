@@ -54,3 +54,9 @@ Install dependencies:
 
 ```bash
 npm install
+```
+
+Start the local development server:
+
+```bash
+npm run dev
