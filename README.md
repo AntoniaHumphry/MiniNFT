@@ -60,3 +60,8 @@ Start the local development server:
 
 ```bash
 npm run dev
+```
+
+After the development server starts, open the local URL shown in your terminal.
+
+## Configuration
