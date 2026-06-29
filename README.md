@@ -71,3 +71,9 @@ For production deployments, set the following environment variable:
 ```bash
 NEXT_PUBLIC_URL=https://your-deployed-site.example
 ```
+
+`NEXT_PUBLIC_URL` should point to the live deployed site so that app metadata resolves correctly.
+
+## Usage
+
+1. Open the MiniNFT app.
