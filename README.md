@@ -65,3 +65,9 @@ npm run dev
 After the development server starts, open the local URL shown in your terminal.
 
 ## Configuration
+
+For production deployments, set the following environment variable:
+
+```bash
+NEXT_PUBLIC_URL=https://your-deployed-site.example
+```
