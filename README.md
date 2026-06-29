@@ -93,3 +93,10 @@ MiniNFT is wired to the following Base mainnet contract:
 ## Development Notes
 
 The app is intended for the Base mainnet mint flow.
+
+When making changes, verify that:
+
+- The contract address remains correct.
+- The mint limit behavior still works as expected.
+- Supply reads continue to display current information.
+- Metadata points to the correct deployed URL.
